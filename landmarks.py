@@ -21,8 +21,8 @@ video_capture = cv2.VideoCapture(1) #Webcam object
 #Change Frame Rate
 #video_capture.set(cv2.cv.CV_CAP_PROP_FPS, 60)
 #Change Resolution
-video_capture.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 320);
-video_capture.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 130);
+video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320);
+video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 130);
 
 detector = dlib.get_frontal_face_detector() #Face detector
 #Landmark identifier. Set the filename to whatever you named the downloaded file
@@ -41,7 +41,7 @@ while True:
         shape = predictor(clahe_image, d) #Get coordinates
         for i in range(1,68): #There are 68 landmark points on each face
             if i == 48:
-                cv2.circle(landmark, (shape.part(i).x, shape.part(land_i).y), 2, (255,0,0), thickness=-1) #For each point, draw a red circle with thickness2 on the original frame
+                cv2.circle(landmark, (shape.part(i).x, shape.part(i).y), 2, (255,0,0), thickness=-1) #For each point, draw a red circle with thickness2 on the original frame
 
             else:
                 cv2.circle(landmark, (shape.part(i).x, shape.part(i).y), 2, (0,255,0), thickness=-1) #For each point, draw a red circle with thickness2 on the original frame
