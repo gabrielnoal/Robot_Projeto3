@@ -5,24 +5,51 @@
 import cv2
 import dlib
 import numpy as np
-#Dlib positions
-#  ("mouth", (48, 54)),
-#	("right_eyebrow", (17, 22)),
-#	("left_eyebrow", (22, 27)),
-#	("right_eye", (36, 42)),
-#	("left_eye", (42, 48)),
-#	("nose", (27, 35)),
-#	("jaw", (0, 17))
+import math
 
 
 
+#VECTOR1 = 48=>54  #BOCA INTEIRA
+
+'''Figure 6.4. Visualisation of ang1 angle.'''
+#VECTOR1 = 48=>63
+#VECTOR2 = 48=>67
+
+'''Figure 6.5. Visualisation of ang2 angle'''
+#VECTOR1 = 48=>63
+#VECTOR2 = 48=>33
+
+'''Figure 6.6. Visualisation of ang3 angle'''
+#VECTOR1 = 48=>54
+#VECTOR2 = 48=>31
+
+
+'''Figure 6.7. Visualisation of ang4 angle'''
+#VECTOR1 = 57=>48    #ESQUERDO
+#VECTOR2 = 57=>54  #DIREITO
+
+
+def dotproduct(v1, v2):
+  return sum((a*b) for a, b in zip(v1, v2))
+
+def length(v):
+  return math.sqrt(dotproduct(v, v))
+
+def angle(v1, v2):
+  return math.acos(dotproduct(v1, v2) / (length(v1) * length(v2)))
+
+    
+font = cv2.FONT_HERSHEY_SIMPLEX
+fontScale = 0.4
+fontColor = (255,255,255)
+lineType = 2
 #Set up some required objects
 video_capture = cv2.VideoCapture(1) #Webcam object
 #Change Frame Rate
 #video_capture.set(cv2.cv.CV_CAP_PROP_FPS, 60)
 #Change Resolution
 video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320);
-video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 130);
+video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 230);
 
 detector = dlib.get_frontal_face_detector() #Face detector
 #Landmark identifier. Set the filename to whatever you named the downloaded file
@@ -40,11 +67,12 @@ while True:
     for k,d in enumerate(detections): #For each detected face  
         shape = predictor(clahe_image, d) #Get coordinates
         for i in range(1,68): #There are 68 landmark points on each face
-            if i == 48:
+            if i == 48 or i == 67 or i == 57 or i == 54:
                 cv2.circle(landmark, (shape.part(i).x, shape.part(i).y), 2, (255,0,0), thickness=-1) #For each point, draw a red circle with thickness2 on the original frame
 
             else:
                 cv2.circle(landmark, (shape.part(i).x, shape.part(i).y), 2, (0,255,0), thickness=-1) #For each point, draw a red circle with thickness2 on the original frame
+                cv2.putText(landmark, str(i), (shape.part(i).x, shape.part(i).y), font,fontScale,fontColor,lineType)
             #cv2.putText(frame, str(i), (shape.part(i).x,shape.part(i).y),
             #        fontFace=cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,
             #        fontScale=0.3,
