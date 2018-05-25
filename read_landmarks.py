@@ -41,7 +41,7 @@ images_sad =[]
             
 
 
-def main(images,isHappy):
+def main(images,path,out):
     all_angles =[]
     angles1 =[]
     angles2 =[]
@@ -111,142 +111,95 @@ def main(images,isHappy):
         
         
         
-        if isHappy == True:
-            angle63_48_67 = angle_between(point63,point48,point67)
-            #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(255,0,0),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point67[0],point67[1]),(255,0,0),thickness=-1)
-            angles1.append(angle63_48_67)
+        
+        angle63_48_67 = angle_between(point63,point48,point67)
+        #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(255,0,0),thickness=-1)
+        #cv2.line(img,(point48[0],point48[1]),(point67[0],point67[1]),(255,0,0),thickness=-1)
+        angles1.append(angle63_48_67)
 
-            angle33_48_63 = angle_between(point33,point48,point63)
-            #cv2.line(img,(point48[0],point48[1]),(point33[0],point33[1]),(0,255,0),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(0,255,0),thickness=-1)
-            angles2.append(angle33_48_63)
+        angle33_48_63 = angle_between(point33,point48,point63)
+        #cv2.line(img,(point48[0],point48[1]),(point33[0],point33[1]),(0,255,0),thickness=-1)
+        #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(0,255,0),thickness=-1)
+        angles2.append(angle33_48_63)
 
-            angle31_48_54 = angle_between(point31,point48,point54)
-            #cv2.line(img,(point48[0],point48[1]),(point31[0],point31[1]),(0,0,255),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point54[0],point54[1]),(0,0,255),thickness=-1)
-            angles3.append(angle31_48_54)
+        angle31_48_54 = angle_between(point31,point48,point54)
+        #cv2.line(img,(point48[0],point48[1]),(point31[0],point31[1]),(0,0,255),thickness=-1)
+        #cv2.line(img,(point48[0],point48[1]),(point54[0],point54[1]),(0,0,255),thickness=-1)
+        angles3.append(angle31_48_54)
 
-            angle48_57_54 = angle_between(point48,point57,point54)
-            #cv2.line(img,(point57[0],point57[1]),(point48[0],point48[1]),(255,255,255),thickness=-1)
-            #cv2.line(img,(point57[0],point57[1]),(point54[0],point54[1]),(255,255,255),thickness=-1)
-            angles4.append(angle48_57_54)
+        angle48_57_54 = angle_between(point48,point57,point54)
+        #cv2.line(img,(point57[0],point57[1]),(point48[0],point48[1]),(255,255,255),thickness=-1)
+        #cv2.line(img,(point57[0],point57[1]),(point54[0],point54[1]),(255,255,255),thickness=-1)
+        angles4.append(angle48_57_54)
 
-            angle31_51_35 = angle_between(point31,point51,point35)
-            #cv2.line(img,(point51[0],point51[1]),(point31[0],point31[1]),(255,0,0),thickness=-1)
-            #cv2.line(img,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=-1)
-            angles5.append(angle31_51_35)
+        angle31_51_35 = angle_between(point31,point51,point35)
+        #cv2.line(img,(point51[0],point51[1]),(point31[0],point31[1]),(255,0,0),thickness=-1)
+        #cv2.line(img,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=-1)
+        angles5.append(angle31_51_35)
 
-            angles.append(angle63_48_67)
-            angles.append(angle33_48_63)
-            angles.append(angle31_48_54)
-            angles.append(angle48_57_54)
-            angles.append(angle31_51_35)
+        angles.append(angle63_48_67)
+        angles.append(angle33_48_63)
+        angles.append(angle31_48_54)
+        angles.append(angle48_57_54)
+        angles.append(angle31_51_35)
 
-            fotos_angles.append(angles)
+        fotos_angles.append(angles)
 
 
-            all_angles.append(angles1)
-            all_angles.append(angles2)
-            all_angles.append(angles3)
-            all_angles.append(angles4)
-            all_angles.append(angles5)
+        #cv2.imwrite("emotions/{}/landmarks{}.png".format(path,foto), img) #Display the frame
+        print("Fotos prontas: {0}/{1}".format(foto,len(images)))
+        
+        fotos_arq = open('foto_{}_angles.txt'.format(path), 'w')
+        fotos_arq.write("Imagens {}".format(path))
+        i=0
+        break_line = " \n"
 
-            cv2.imwrite("emotions/happy/landmarks{0}.png".format(foto), img) #Display the frame
-            print("Fotos prontas: {0}/{1}".format(foto,len(images)))
+        for angle_list in fotos_angles:
+            i+=1
+            fotos_arq.write("Foto "+str(i)+break_line)
+            for angle in angle_list:
+                fotos_arq.write(str(angle)+break_line)
+            fotos_arq.write(str(out)+break_line)
             
-            fotos_arq = open('foto_happy_angles.txt', 'w')
-            fotos_arq.write("Imagens Happy")
-            i=0
-            break_line = " \n"
-
-            for angle_list in fotos_angles:
-                i+=1
-                fotos_arq.write("Foto "+str(i)+break_line)
-                for angle in angle_list:
-                    fotos_arq.write(str(angle)+break_line)
-                
-            fotos_arq.close()
-
-            arq = open('angles_happy.txt', 'w')
-
             
-            for i in range(0,len(all_angles)):
-                arq.write("angles "+str(i)+break_line)
-                for k in range(0,len(all_angles[i])):
-                    angle = all_angles[i][k]
-                    arq.write(str(angle)+break_line)
+        fotos_arq.close()
 
+        arq = open('angles_{}.txt'.format(path), 'w')
+        
+        i=1
+        arq.write("angles "+str(i)+break_line)
+        for angle in angles1:
+            arq.write(str(angle)+break_line)
+        arq.write(str(out)+break_line)
             
-                
-            arq.close()
+        i+=1
+        arq.write("angles "+str(i)+break_line)
+        for angle in angles2:
+            arq.write(str(angle)+break_line)
+        arq.write(str(out)+break_line)
+        
+        i+=1
+        arq.write("angles "+str(i)+break_line)
+        for angle in angles3:
+            arq.write(str(angle)+break_line)
+        arq.write(str(out)+break_line)
+        
+        i+=1
+        arq.write("angles "+str(i)+break_line)
+        for angle in angles4:
+            arq.write(str(angle)+break_line)
+        arq.write(str(out)+break_line)
+        
+        i+=1
+        arq.write("angles "+str(i)+break_line)
+        for angle in angles5:
+            arq.write(str(angle)+break_line)
+        arq.write(str(out)+break_line)
 
-        else:
-            angle63_48_67 = angle_between(point63,point48,point67)
-            #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(255,0,0),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point67[0],point67[1]),(255,0,0),thickness=-1)
-            angles1.append(angle63_48_67)
-
-            angle33_48_63 = angle_between(point33,point48,point63)
-            #cv2.line(img,(point48[0],point48[1]),(point33[0],point33[1]),(0,255,0),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(0,255,0),thickness=-1)
-            angles2.append(angle33_48_63)
-
-            angle31_48_54 = angle_between(point31,point48,point54)
-            #cv2.line(img,(point48[0],point48[1]),(point31[0],point31[1]),(0,0,255),thickness=-1)
-            #cv2.line(img,(point48[0],point48[1]),(point54[0],point54[1]),(0,0,255),thickness=-1)
-            angles3.append(angle31_48_54)
-
-            angle48_57_54 = angle_between(point48,point57,point54)
-            #cv2.line(img,(point57[0],point57[1]),(point48[0],point48[1]),(255,255,255),thickness=-1)
-            #cv2.line(img,(point57[0],point57[1]),(point54[0],point54[1]),(255,255,255),thickness=-1)
-            angles4.append(angle48_57_54)
-
-            angle31_51_35 = angle_between(point31,point51,point35)
-            #cv2.line(img,(point51[0],point51[1]),(point31[0],point31[1]),(255,0,0),thickness=-1)
-            #cv2.line(img,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=-1)
-            angles5.append(angle31_51_35)
-
-            angles.append(angle63_48_67)
-            angles.append(angle33_48_63)
-            angles.append(angle31_48_54)
-            angles.append(angle48_57_54)
-            angles.append(angle31_51_35)
-
-            fotos_angles.append(angles)
-
-
-            all_angles.append(angles1)
-            all_angles.append(angles2)
-            all_angles.append(angles3)
-            all_angles.append(angles4)
-            all_angles.append(angles5)
-            cv2.imwrite("emotions/sad/landmarks{0}.png".format(foto), img) #Display the frame
-            print("Fotos prontas: {0}/{1}".format(foto,len(images)))
+        
             
-            fotos_arq = open('foto_sad_angles.txt', 'w')
-            fotos_arq.write("Imagens sad")
-            i=0
-            break_line = " \n"
-            for angle_list in fotos_angles:
-                i+=1
-                fotos_arq.write("Foto "+str(i)+break_line)
-                for angle in angle_list:
-                    fotos_arq.write(str(angle)+break_line)
-                
-            fotos_arq.close()
+        arq.close()
 
-            arq = open('angles_sad.txt', 'w')
-
-            
-            for i in range(0,len(all_angles)):  
-                arq.write("angles "+str(i)+break_line)
-                for k in range(0,len(all_angles[i])):
-                    angle = all_angles[i][k]
-                    arq.write(str(angle)+break_line)
-
-                
-            arq.close()
         
 
 load_images_from_folder("emotions")
@@ -256,5 +209,5 @@ detector = dlib.get_frontal_face_detector() #Face detector
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat") 
 
 
-main(images_happy, True)
-main(images_sad, False)
+main(images_happy, "happy",1)
+main(images_sad, "sad",0)
