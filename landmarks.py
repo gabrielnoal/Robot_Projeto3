@@ -141,9 +141,10 @@ while True:
     #cv2.line(landmark,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=1)
     angles.append(angle31_51_35)
 
-    #cv2.imshow("image", frame) #Display the frame
-    cv2.imshow("landmark", landmark) #Display the frame
     
+    #cv2.putText(landmark, , (shape.part(i).x, shape.part(i).y), font,fontScale,fontColor,lineType)
+
+    cv2.imshow("landmark", landmark) #Display the frame
 
     if cv2.waitKey(1) & 0xFF == ord('q'): #Exit program when the user presses 'q'
         break

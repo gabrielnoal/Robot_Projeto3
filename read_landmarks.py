@@ -16,7 +16,7 @@ import fnmatch
 
 def load_images_from_folder(folder):
     for root, dir, files in os.walk("./"+folder):
-        for items in fnmatch.filter(files, "*.jpg"):
+        for items in sorted(fnmatch.filter(files, "*.jpg")):
                 img = cv2.imread(os.path.join(root, items))
                 if img is not None:
                     if root == "./"+folder+"/happy":
@@ -27,12 +27,15 @@ def load_images_from_folder(folder):
                         print(root)
 
 
-def angle_between(p0,p1,p2):
-    v0 = np.array(p0) - np.array(p1)
-    v1 = np.array(p2) - np.array(p1)
-    angle = np.math.atan2(np.linalg.det([v0,v1]),np.dot(v0,v1))
-    return angle #in radians
-
+def angle_between(p0,p1,p2,image_list,image):
+    try:
+        v0 = np.array(p0) - np.array(p1)
+        v1 = np.array(p2) - np.array(p1)
+        angle = np.math.atan2(np.linalg.det([v0,v1]),np.dot(v0,v1))
+        return angle #in radians
+    except:
+        return False
+ 
 
 images_happy =[]
 images_sad =[]
@@ -112,93 +115,96 @@ def main(images,path,out):
         
         
         
-        angle63_48_67 = angle_between(point63,point48,point67)
+        angle63_48_67 = angle_between(point63,point48,point67,images,foto)
         #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(255,0,0),thickness=-1)
         #cv2.line(img,(point48[0],point48[1]),(point67[0],point67[1]),(255,0,0),thickness=-1)
         angles1.append(angle63_48_67)
 
-        angle33_48_63 = angle_between(point33,point48,point63)
+        angle33_48_63 = angle_between(point33,point48,point63,images,foto)
         #cv2.line(img,(point48[0],point48[1]),(point33[0],point33[1]),(0,255,0),thickness=-1)
         #cv2.line(img,(point48[0],point48[1]),(point63[0],point63[1]),(0,255,0),thickness=-1)
         angles2.append(angle33_48_63)
 
-        angle31_48_54 = angle_between(point31,point48,point54)
+        angle31_48_54 = angle_between(point31,point48,point54,images,foto)
         #cv2.line(img,(point48[0],point48[1]),(point31[0],point31[1]),(0,0,255),thickness=-1)
         #cv2.line(img,(point48[0],point48[1]),(point54[0],point54[1]),(0,0,255),thickness=-1)
         angles3.append(angle31_48_54)
 
-        angle48_57_54 = angle_between(point48,point57,point54)
+        angle48_57_54 = angle_between(point48,point57,point54,images,foto)
         #cv2.line(img,(point57[0],point57[1]),(point48[0],point48[1]),(255,255,255),thickness=-1)
         #cv2.line(img,(point57[0],point57[1]),(point54[0],point54[1]),(255,255,255),thickness=-1)
         angles4.append(angle48_57_54)
 
-        angle31_51_35 = angle_between(point31,point51,point35)
+        angle31_51_35 = angle_between(point31,point51,point35,images,foto)
         #cv2.line(img,(point51[0],point51[1]),(point31[0],point31[1]),(255,0,0),thickness=-1)
         #cv2.line(img,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=-1)
         angles5.append(angle31_51_35)
 
-        angles.append(angle63_48_67)
-        angles.append(angle33_48_63)
-        angles.append(angle31_48_54)
-        angles.append(angle48_57_54)
-        angles.append(angle31_51_35)
+        if angle63_48_67 != False and angle33_48_63 != False and angle31_48_54 != False and angle48_57_54 != False and angle31_51_35 != False:
+            angles.append(angle63_48_67)
+            angles.append(angle33_48_63)
+            angles.append(angle31_48_54)
+            angles.append(angle48_57_54)
+            angles.append(angle31_51_35)
 
-        fotos_angles.append(angles)
+            fotos_angles.append(angles)
 
 
-        #cv2.imwrite("emotions/{}/landmarks{}.png".format(path,foto), img) #Display the frame
-        print("Fotos prontas: {0}/{1}".format(foto,len(images)))
-        
-        fotos_arq = open('foto_{}_angles.txt'.format(path), 'w')
-        fotos_arq.write("Imagens {}".format(path))
-        i=0
-        break_line = " \n"
+            #cv2.imwrite("emotions/{}/landmarks{}.png".format(path,foto), img) #Display the frame
+            print("Fotos prontas: {0}/{1}".format(foto,len(images)))
+            
+            fotos_arq = open('foto_{}_angles.txt'.format(path), 'w')
+            break_line = " \n"        
+            fotos_arq.write("Imagens {} {}".format(path,break_line))
+            i=0
 
-        for angle_list in fotos_angles:
+            for angle_list in fotos_angles:
+                i+=1
+                fotos_arq.write("Foto "+str(i)+break_line)
+                for angle in angle_list:
+                    fotos_arq.write(str(angle)+break_line)
+                fotos_arq.write(str(out)+break_line)
+                
+                
+            fotos_arq.close()
+
+            arq = open('angles_{}.txt'.format(path), 'w')
+            
+            i=1
+            arq.write("angles "+str(i)+break_line)
+            for angle in angles1:
+                arq.write(str(angle)+break_line)
+            arq.write(str(out)+break_line)
+                
             i+=1
-            fotos_arq.write("Foto "+str(i)+break_line)
-            for angle in angle_list:
-                fotos_arq.write(str(angle)+break_line)
-            fotos_arq.write(str(out)+break_line)
+            arq.write("angles "+str(i)+break_line)
+            for angle in angles2:
+                arq.write(str(angle)+break_line)
+            arq.write(str(out)+break_line)
             
+            i+=1
+            arq.write("angles "+str(i)+break_line)
+            for angle in angles3:
+                arq.write(str(angle)+break_line)
+            arq.write(str(out)+break_line)
             
-        fotos_arq.close()
+            i+=1
+            arq.write("angles "+str(i)+break_line)
+            for angle in angles4:
+                arq.write(str(angle)+break_line)
+            arq.write(str(out)+break_line)
+            
+            i+=1
+            arq.write("angles "+str(i)+break_line)
+            for angle in angles5:
+                arq.write(str(angle)+break_line)
+            arq.write(str(out)+break_line)
 
-        arq = open('angles_{}.txt'.format(path), 'w')
-        
-        i=1
-        arq.write("angles "+str(i)+break_line)
-        for angle in angles1:
-            arq.write(str(angle)+break_line)
-        arq.write(str(out)+break_line)
             
-        i+=1
-        arq.write("angles "+str(i)+break_line)
-        for angle in angles2:
-            arq.write(str(angle)+break_line)
-        arq.write(str(out)+break_line)
-        
-        i+=1
-        arq.write("angles "+str(i)+break_line)
-        for angle in angles3:
-            arq.write(str(angle)+break_line)
-        arq.write(str(out)+break_line)
-        
-        i+=1
-        arq.write("angles "+str(i)+break_line)
-        for angle in angles4:
-            arq.write(str(angle)+break_line)
-        arq.write(str(out)+break_line)
-        
-        i+=1
-        arq.write("angles "+str(i)+break_line)
-        for angle in angles5:
-            arq.write(str(angle)+break_line)
-        arq.write(str(out)+break_line)
-
-        
-            
-        arq.close()
+                
+            arq.close()
+        else:
+            print(images.index(img))
 
         
 
