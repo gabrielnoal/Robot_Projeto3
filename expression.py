@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
+
 from sklearn import svm
 import numpy as np
 import pandas as pd
-from sklearn.naive_bayes
-import GaussianNB
+from sklearn.naive_bayes import GaussianNB
 
 class Expression:
     def __init__(self):
-        self.Train()
-    def Train(self):
+        self.train()
+
+    def train(self):
         ls = [] #Lista de angulos happy
         lh = [] #Lista de angulos sad
         filepath = 'foto_happy_angles.txt'  
@@ -46,8 +48,9 @@ class Expression:
         model = GaussianNB()
         return model.fit(X_train, y_train) #Salva o treinamento
         
-    def Predict(angle_array):
+    def predict(self,angle_array):
         dados = pd.DataFrame(data=angle_array)
         X_pred = dados.iloc[:,[0,1,2,3,4]] #Pegando os angulos do frame como entrada para o treinamento
         y_pred = model.predict(X_pred) #Prevendo a saída
+        #print("y_pred: {}".format(y_pred))
         return y_pred 
