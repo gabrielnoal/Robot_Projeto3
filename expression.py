@@ -7,7 +7,7 @@ from sklearn.naive_bayes import GaussianNB
 
 class Expression:
     def __init__(self):
-        self.train()
+        self.model = self.train()
 
     def train(self):
         ls = [] #Lista de angulos happy
@@ -51,6 +51,6 @@ class Expression:
     def predict(self,angle_array):
         dados = pd.DataFrame(data=angle_array)
         X_pred = dados.iloc[:,[0,1,2,3,4]] #Pegando os angulos do frame como entrada para o treinamento
-        y_pred = model.predict(X_pred) #Prevendo a saída
+        y_pred = self.model.predict(X_pred) #Prevendo a saída
         #print("y_pred: {}".format(y_pred))
         return y_pred 

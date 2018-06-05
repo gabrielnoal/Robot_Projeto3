@@ -2,11 +2,11 @@
 # Emotion Recognition Using Facial Landmarks, Python, DLib and OpenCV. A tech blog about fun things with Python and embedded electronics.
 # Retrieved from: http://www.paulvangent.com/2016/08/05/emotion-recognition-using-facial-landmarks/
 #Import required modules
+from expression import Expression
 import cv2
 import dlib
 import numpy as np
 import math
-from expression import Expression
 
 def angle_between(p0,p1,p2):
     try:
@@ -41,7 +41,7 @@ def angle_between(p0,p1,p2):
 #VECTOR2 = 51=>35
 
 
-#exp = Expression()
+exp = Expression()
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 0.4
@@ -55,12 +55,13 @@ video_capture = cv2.VideoCapture(0) #Webcam object
 video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320);
 video_capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 230);
 
-angles=[]
 
 detector = dlib.get_frontal_face_detector() #Face detector
 #Landmark identifier. Set the filename to whatever you named the downloaded file
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat") 
 while True:
+    angles=[]
+
     ret, frame = video_capture.read()
     landmark = np.zeros_like(frame)
     #frame = cv2.flip(frame,180)
@@ -142,11 +143,18 @@ while True:
     #cv2.line(landmark,(point51[0],point51[1]),(point35[0],point35[1]),(255,0,0),thickness=1)
     angles.append(angle31_51_35)
 
+
     exp_angles=[]
     exp_angles.append(angles)
-
-    #exp.predict(exp_angles)
-    #cv2.putText(landmark, , (shape.part(i).x, shape.part(i).y), font,fontScale,fontColor,lineType)
+    
+    try:
+        if exp.predict(exp_angles) == 1:
+            expressao = "FELIZ"
+        else:
+            expressao = "TRISTE"
+        cv2.putText(landmark, expressao, (400,50), font,fontScale,fontColor,lineType)
+    except:
+        print("ERRO")
 
     cv2.imshow("landmark", landmark) #Display the frame
 
