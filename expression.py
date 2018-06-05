@@ -53,4 +53,4 @@ class Expression:
         X_pred = dados.iloc[:,[0,1,2,3,4]] #Pegando os angulos do frame como entrada para o treinamento
         y_pred = self.model.predict(X_pred) #Prevendo a saída
         #print("y_pred: {}".format(y_pred))
-        return y_pred 
+        return y_pred

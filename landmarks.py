@@ -15,7 +15,7 @@ def angle_between(p0,p1,p2):
         angle = np.math.atan2(np.linalg.det([v0,v1]),np.dot(v0,v1))
         return angle #in radians
     except:
-        cv2.putText(landmark, "Nenhuma face identificada", (20,450), font,fontScale*2,fontColor,lineType)
+        cv2.putText(landmark, "Nenhuma face identificada", (20,450), font,fontScale,fontColor,lineType)
     
 
 
@@ -44,7 +44,7 @@ def angle_between(p0,p1,p2):
 exp = Expression()
 
 font = cv2.FONT_HERSHEY_SIMPLEX
-fontScale = 0.4
+fontScale = 1
 fontColor = (255,255,255)
 lineType = 2
 #Set up some required objects
@@ -63,7 +63,8 @@ while True:
     angles=[]
 
     ret, frame = video_capture.read()
-    landmark = np.zeros_like(frame)
+    landmark = frame
+    #landmark = np.zeros_like(frame)
     #frame = cv2.flip(frame,180)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
@@ -152,9 +153,9 @@ while True:
             expressao = "FELIZ"
         else:
             expressao = "TRISTE"
-        cv2.putText(landmark, expressao, (400,50), font,fontScale,fontColor,lineType)
+        cv2.putText(landmark, expressao, (20,450), font,fontScale,fontColor,lineType)
     except:
-        print("ERRO")
+        pass
 
     cv2.imshow("landmark", landmark) #Display the frame
 
