@@ -150,9 +150,9 @@ while True:
             print("ERROR-1")
         try:
             if exp.predict(exp_angles) == 1:
-                expressao = "FELIZ"
+                expressao = "Com sorrisinho"
             else:
-                expressao = "TRISTE"
+                expressao = "Sem sorrisinho"
             cv2.putText(frame, expressao, (x1,y1), font,fontScale,fontColor,lineType)
         except:
             print("ERROR-2")
